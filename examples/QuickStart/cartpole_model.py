@@ -20,7 +20,7 @@ import parl
 
 class CartpoleModel(parl.Model):
     """ Linear network to solve Cartpole problem.
-    
+
     Args:
         obs_dim (int): Dimension of observation space.
         act_dim (int): Dimension of action space.
@@ -31,8 +31,10 @@ class CartpoleModel(parl.Model):
         hid1_size = act_dim * 10
         self.fc1 = nn.Linear(obs_dim, hid1_size)
         self.fc2 = nn.Linear(hid1_size, act_dim)
+        self.tanh = nn.Tanh()
+        self.softmax = nn.Softmax()
 
     def forward(self, x):
-        out = paddle.tanh(self.fc1(x))
-        prob = F.softmax(self.fc2(out), axis=-1)
+        out = self.tanh(self.fc1(x))
+        prob = self.softmax(self.fc2(out))
         return prob
